@@ -26,6 +26,11 @@ type Image {
   userId: String
 }
 
+input CreateUser {
+  fullName: String
+  email: String
+}
+
 type Mutation {
-  createUser(fullName: String!): User!
+  createUser(input: CreateUser): User!
 }
