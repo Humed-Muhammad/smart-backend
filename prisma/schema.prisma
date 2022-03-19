@@ -5,8 +5,11 @@ generator client {
   provider = "prisma-client-js"
 }
 
-generator typegraphql {
-  provider = "typegraphql-prisma"
+generator nestgraphql {
+  provider               = "node node_modules/prisma-nestjs-graphql"
+  output                 = "../src/@generated"
+  fields_Validator_from  = "class-validator"
+  fields_Validator_input = true
 }
 
 datasource db {
@@ -16,9 +19,12 @@ datasource db {
 
 model User {
   id            String   @id @default(uuid())
+  ///@Validator.IsString() @Validator.MinLength(4)
   fullName      String
+  ///@Validator.IsEmail()
   email         String   @unique
   phoneNumber   String   @unique
+  ///@Validator.MinLength(6)
   password      String
   userType      UserType @default(REGULAR)
   emailVerified Boolean  @default(false)

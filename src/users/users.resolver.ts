@@ -1,24 +1,31 @@
 import { Args, Resolver, Query, Mutation } from '@nestjs/graphql';
-import { User } from '@generated/type-graphql';
+import { User } from '@prisma/client';
+import { UserCreateInput } from 'src/@generated/user/user-create.input';
+import { PrismaService } from 'src/prisma/prisma.service';
 
 @Resolver()
 export class UsersResolver {
-  users = [
-    { id: '0', fullName: 'HUmed', email: 'yuit78687' },
-    { id: '1', fullName: 'Ahmed', email: 'dfgdgfx675' },
-  ];
-
+  constructor(private prisma: PrismaService) {}
   @Query('users')
-  getUser() {
-    return this.users;
+  async getUsers() {
+    return await this.prisma.user.findMany();
   }
 
-  @Mutation(() => User)
-  createUser(@Args('input') input: User) {
-    const id = `${this.users.length}` as string;
-    const newUser = { id, ...input };
-    console.log(newUser);
-    this.users.push(newUser);
+  @Query('getUserById')
+  async getUser(@Args('id') id: string) {
+    const user = await this.prisma.user.findUnique({
+      where: {
+        id,
+      },
+    });
+    console.log(user);
+    if (user === null) {
+      return 'No user found with this Id';
+    } else user;
+  }
+  @Mutation()
+  async createUser(@Args('data') data: UserCreateInput) {
+    const newUser = await this.prisma.user.create({ data });
     return newUser;
   }
 }

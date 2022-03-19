@@ -27,10 +27,16 @@ type Image {
 }
 
 input CreateUser {
-  fullName: String
   email: String
+  fullName: String
+  password: String
+  phoneNumber: String
 }
 
 type Mutation {
-  createUser(input: CreateUser): User!
+  createUser(data: CreateUser): User!
+}
+
+type Query {
+  getUserById(id: String!): String
 }
