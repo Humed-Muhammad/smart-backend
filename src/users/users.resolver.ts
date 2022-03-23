@@ -1,31 +1,28 @@
 import { Args, Resolver, Query, Mutation } from '@nestjs/graphql';
-import { User } from '@prisma/client';
 import { UserCreateInput } from 'src/@generated/user/user-create.input';
-import { PrismaService } from 'src/prisma/prisma.service';
+import { User } from 'src/@generated/user/user.model';
+import { UsersService } from './users.service';
 
 @Resolver()
 export class UsersResolver {
-  constructor(private prisma: PrismaService) {}
-  @Query('users')
-  async getUsers() {
-    return await this.prisma.user.findMany();
+  constructor(private userService: UsersService) {}
+  @Query()
+  async getAllUsers(): Promise<User[]> {
+    return this.userService.getAllUsers();
   }
 
-  @Query('getUserById')
-  async getUser(@Args('id') id: string) {
-    const user = await this.prisma.user.findUnique({
-      where: {
-        id,
-      },
-    });
-    console.log(user);
-    if (user === null) {
-      return 'No user found with this Id';
-    } else user;
+  @Query()
+  async getOneUser(@Args('id') id: string): Promise<User> {
+    return this.userService.getOneUser(id);
   }
+
+  @Query()
+  async getUserByEmail(@Args('email') email: string): Promise<User> {
+    return this.userService.getUserByEmail(email);
+  }
+
   @Mutation()
-  async createUser(@Args('data') data: UserCreateInput) {
-    const newUser = await this.prisma.user.create({ data });
-    return newUser;
+  async register(@Args('data') data: UserCreateInput) {
+    return this.userService.register(data);
   }
 }
