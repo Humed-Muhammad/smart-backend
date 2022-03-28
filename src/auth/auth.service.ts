@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { UsersService } from 'src/users/users.service';
-import bcrypt from 'bcrypt';
+import { compare, compareSync } from 'bcrypt';
 import { User } from '@prisma/client';
 
 @Injectable()
@@ -14,10 +14,10 @@ export class AuthService {
   // Find the user in db
   async validate(email: string, password: string) {
     const user = await this.usersService.getUserByEmail(email);
-    if (!user.email) {
+    if (!user) {
       return null;
     }
-    const validPassword = bcrypt.compare(password, user.password);
+    const validPassword = await compare(password, user.password);
     return validPassword ? user : 'Incorrect email or password!';
   }
 

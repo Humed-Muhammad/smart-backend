@@ -12,14 +12,12 @@ import { ConfigModule } from '@nestjs/config';
     GraphQLModule.forRoot({
       typePaths: ['./**/*.graphql'],
       driver: ApolloDriver,
+      context: ({ req }) => ({ req }),
     }),
     UsersModule,
     PrismaModule,
     AuthModule,
-    ConfigModule.forRoot({
-      envFilePath: ['../.env'],
-      isGlobal: true,
-    }),
+    ConfigModule.forRoot(),
   ],
   providers: [
     {
