@@ -2,7 +2,7 @@
 /dist
 /node_modules
 /src/@generated
-/.env
+
 
 # Logs
 logs
@@ -14,6 +14,7 @@ yarn-error.log*
 lerna-debug.log*
 # OS
 .DS_Store
+.env
 
 # Tests
 /coverage

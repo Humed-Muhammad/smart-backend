@@ -17,7 +17,7 @@ import { ConfigModule } from '@nestjs/config';
     UsersModule,
     PrismaModule,
     AuthModule,
-    ConfigModule.forRoot(),
+    ConfigModule.forRoot({}),
   ],
   providers: [
     {

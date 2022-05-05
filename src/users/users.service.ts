@@ -37,6 +37,6 @@ export class UsersService {
     data.password = hashedPassword;
     const newUser = await this.prisma.user.create({ data });
     if (!newUser) throw new Error('Faild to create user');
-    return newUser;
+    return true;
   }
 }
