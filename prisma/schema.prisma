@@ -11,25 +11,42 @@ datasource db {
 }
 
 model User {
-  id            String   @id @default(uuid())
-  fullName      String
-  email         String   @unique
-  phoneNumber   String   @unique
-  password      String
-  userType      UserType @default(REGULAR)
-  emailVerified Boolean  @default(false)
-  image         Image?
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
+  id           String   @id @default(uuid())
+  fullName     String
+  email        String   @unique
+  phoneNumber  String   @unique
+  password     String
+  // userType      UserType @default(REGULAR)
+  // emailVerified Boolean  @default(false)
+  // image         Image?
+  votedUser    Vote?    @relation(name: "votedUser")
+  userVotedFor Vote?    @relation(name: "userVotedFor")
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
 }
 
-model Image {
-  id     String    @id @default(uuid())
-  image  Bytes
-  type   ImageType @default(COMPRESSED)
-  user   User      @relation(fields: [userId], references: [id])
-  userId String    @unique
+model Vote {
+  id           String @id @default(uuid())
+  amount       Int
+  votedUser    User   @relation(name: "votedUser", fields: [userId], references: [id])
+  userId       String @unique
+  userVotedFor User   @relation(name: "userVotedFor", fields: [votedFor], references: [id])
+  votedFor     String @unique
 }
+
+model Admin {
+  id       String @id @default(uuid())
+  email    String @unique
+  password String
+}
+
+// model Image {
+//   id     String    @id @default(uuid())
+//   image  Bytes
+//   type   ImageType @default(COMPRESSED)
+//   user   User      @relation(fields: [userId], references: [id])
+//   userId String    @unique
+// }
 
 enum UserType {
   REGULAR
