@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { UsersService } from 'src/users/users.service';
-import { compare, compareSync } from 'bcrypt';
+import { compare } from 'bcrypt';
 import { User } from '@prisma/client';
 
 @Injectable()
@@ -31,6 +31,7 @@ export class AuthService {
     return {
       accesToken: this.jwtService.sign(payload, {
         secret: process.env.SECRET_KEY,
+        noTimestamp: true,
       }),
     };
   }

@@ -18,23 +18,22 @@ datasource db {
 }
 
 model User {
-  id           String   @id @default(uuid())
+  id           String         @id @default(uuid())
   fullName     String
-  email        String   @unique
-  phoneNumber  String   @unique
+  email        String         @unique
+  phoneNumber  String         @unique
   password     String
-  // userType      UserType @default(REGULAR)
-  // emailVerified Boolean  @default(false)
-  // image         Image?
-  votedUser    Vote?    @relation(name: "votedUser")
-  userVotedFor Vote?    @relation(name: "userVotedFor")
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+  department   DepartmentType
+  isVoted      Boolean        @default(false)
+  profileImage Bytes?
+  votedUser    Vote?          @relation(name: "votedUser")
+  userVotedFor Vote?          @relation(name: "userVotedFor")
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
 }
 
 model Vote {
   id           String @id @default(uuid())
-  amount       Int
   votedUser    User   @relation(name: "votedUser", fields: [userId], references: [id])
   userId       String @unique
   userVotedFor User   @relation(name: "userVotedFor", fields: [votedFor], references: [id])
@@ -42,28 +41,22 @@ model Vote {
 }
 
 model Admin {
-  id       String @id @default(uuid())
-  email    String @unique
+  id       String     @id @default(uuid())
+  email    String     @unique
   password String
+  role     AdminType?
 }
 
-// model Image {
-//   id     String    @id @default(uuid())
-//   image  Bytes
-//   type   ImageType @default(COMPRESSED)
-//   user   User      @relation(fields: [userId], references: [id])
-//   userId String    @unique
-// }
+enum DepartmentType {
+  GEOLOGY
+  KITCHEN
+  DRILLERS
+  CONSTRUCTION
+}
 
-enum UserType {
+enum AdminType {
+  SUPER
+  VOTE_MANAGER
+  DEPARTMENT_LEADER
   REGULAR
-  STANDARD
-  ENTERPISE
-}
-
-enum ImageType {
-  COMPRESSED
-  OPTIMIZED
-  CROPED
-  SUPERRESOLUTION
 }

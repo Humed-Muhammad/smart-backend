@@ -2,31 +2,30 @@
 ### Do not make changes to this file directly
 
 type User {
-  createdAt: String
-  email: String
-  emailVerified: String
-  fullName: String
   id: String
-  password: String
-  phoneNumber: String
+  fullName: String!
+  email: String
+  password: String!
+  phoneNumber: String!
+  isVoted: Boolean
+  profileImage: String
+  department: String!
   updatedAt: String
-  userType: String
-  image: [Image]
+  createdAt: String
 }
 
-type Image {
+type Vote {
   id: String
-  image: String
-  type: String
-  user: User
-  userId: String
+  userId: String!
+  votedFor: String!
 }
 
 input CreateUser {
   email: String
-  fullName: String
-  password: String
-  phoneNumber: String
+  fullName: String!
+  password: String!
+  phoneNumber: String!
+  department: String!
 }
 
 input LoginUser {
@@ -34,13 +33,20 @@ input LoginUser {
   password: String!
 }
 
+input MakeVote {
+  userId: String!
+  votedFor: String!
+}
+
 type Query {
-  getAllUsers: [User!]!
+  getAllUsers(department: String!): [User!]!
   getUserByEmail(email: String!): User!
   getOneUser(id: String!): User!
+  getVote(id: String!): Vote!
 }
 
 type Mutation {
-  register(data: CreateUser!): Boolean
+  register(data: CreateUser!): Boolean!
   login(data: LoginUser!): String!
+  createVote(data: MakeVote!): Boolean!
 }
