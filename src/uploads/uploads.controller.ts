@@ -2,6 +2,7 @@ import {
   Bind,
   Controller,
   Post,
+  Req,
   UploadedFiles,
   UseInterceptors,
 } from '@nestjs/common';
@@ -9,27 +10,59 @@ import { FilesInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { UploadsService } from './uploads.service';
 
-@Controller('uploads')
+@Controller('service')
 export class UploadsController {
   constructor(private readonly uploadsService: UploadsService) {}
 
-  @Post('sharp')
+  @Post('converter')
   @UseInterceptors(
     FilesInterceptor('files', 3, {
       limits: {
-        fileSize: 1000000 * 5,
+        fileSize: 10000000 * 5,
       },
       storage: diskStorage({
         destination: './public/uploads',
-        filename: (req, file, cb) => {
+        filename: (_, file, cb) => {
           return cb(null, file.originalname);
         },
       }),
     }),
   )
   @Bind(UploadedFiles())
-  async uploadFile(files: File[]) {
-    const result = await this.uploadsService.converter(files);
-    return result;
+  async converter(files: File[], @Req() req: Request) {
+    const result = await this.uploadsService.converter(files, req.body['type']);
+    if (result) {
+      return result;
+    } else {
+      throw new Error('Not');
+    }
+  }
+
+  @Post('resize')
+  @UseInterceptors(
+    FilesInterceptor('files', 3, {
+      limits: {
+        fileSize: 10000000 * 5,
+      },
+      storage: diskStorage({
+        destination: './public/resize',
+        filename: (_, file, cb) => {
+          return cb(null, file.originalname);
+        },
+      }),
+    }),
+  )
+  @Bind(UploadedFiles())
+  async resize(files: File[], @Req() req: Request) {
+    const result = await this.uploadsService.resize(
+      files,
+      req.body['width'],
+      req.body['height'],
+    );
+    if (result) {
+      return result;
+    } else {
+      throw new Error('Not');
+    }
   }
 }
