@@ -21,7 +21,7 @@ export class UploadsController {
         fileSize: 10000000 * 5,
       },
       storage: diskStorage({
-        destination: './public/uploads',
+        destination: './public/converter',
         filename: (_, file, cb) => {
           return cb(null, file.originalname);
         },

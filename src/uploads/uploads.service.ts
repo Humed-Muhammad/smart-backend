@@ -47,7 +47,8 @@ export class UploadsService {
       }
       return convertedImages;
     } catch (err) {
-      throw new Error(err);
+      fs.rmSync(`${outputFolderName}`, { recursive: true, force: true });
+      throw new Error('Unsupported image');
     }
   }
   async resize(files: any[], width: number, height: number) {
