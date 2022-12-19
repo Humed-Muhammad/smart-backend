@@ -47,7 +47,7 @@ export class UploadsService {
           .catch(() => {
             fs.rmSync(outputFolderName + `/${file.filename}`);
             fs.rmSync(formatFileExtension(file.filename, type));
-            throw new Error('Unsupported image');
+            throw new Error('There is an error during conversion!.');
           });
       }
       return convertedImages;
@@ -72,6 +72,11 @@ export class UploadsService {
             });
             fs.rmSync(sharpResizeOutPut + `/${file.filename}`);
             fs.rmSync(sharpResizeOutPut + file.originalname);
+          })
+          .catch(() => {
+            fs.rmSync(sharpResizeOutPut + `/${file.filename}`);
+            fs.rmSync(sharpResizeOutPut + file.originalname);
+            throw new Error('Unsupported image');
           });
       }
 
