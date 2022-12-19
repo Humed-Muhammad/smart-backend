@@ -43,11 +43,15 @@ export class UploadsService {
             });
             fs.rmSync(outputFolderName + `/${file.filename}`);
             fs.rmSync(formatFileExtension(file.filename, type));
+          })
+          .catch(() => {
+            fs.rmSync(outputFolderName + `/${file.filename}`);
+            fs.rmSync(formatFileExtension(file.filename, type));
+            throw new Error('Unsupported image');
           });
       }
       return convertedImages;
     } catch (err) {
-      fs.rmSync(`${outputFolderName}`, { recursive: true, force: true });
       throw new Error('Unsupported image');
     }
   }
