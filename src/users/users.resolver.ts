@@ -1,10 +1,8 @@
 import { UseGuards } from '@nestjs/common';
 import { Args, Resolver, Query, Mutation } from '@nestjs/graphql';
 import { Prisma } from '@prisma/client';
-import { DepartmentType } from 'src/@generated/prisma/department-type.enum';
 import { UserCreateInput } from 'src/@generated/user/user-create.input';
 import { User } from 'src/@generated/user/user.model';
-import { VoteCreateInput } from 'src/@generated/vote/vote-create.input';
 import { GqlAuthGuards } from 'src/auth/guards/gql.auth.guard';
 import { UsersService } from './users.service';
 
@@ -13,10 +11,8 @@ export class UsersResolver {
   constructor(private userService: UsersService) {}
   @Query()
   @UseGuards(GqlAuthGuards)
-  async getAllUsers(
-    @Args('department') department: DepartmentType,
-  ): Promise<User[]> {
-    return this.userService.getAllUsers(department);
+  async getAllUsers(): Promise<User[]> {
+    return this.userService.getAllUsers();
   }
 
   @Query()
@@ -28,20 +24,6 @@ export class UsersResolver {
   @Query()
   async getUserByEmail(@Args('email') email: string): Promise<User> {
     return this.userService.getUserByEmail(email);
-  }
-
-  @UseGuards(GqlAuthGuards)
-  @Mutation()
-  async createVote(@Args('data') data: VoteCreateInput) {
-    try {
-      const vote = await this.userService.createVote(data);
-      if (!vote) {
-        return false;
-      }
-      return vote;
-    } catch (error) {
-      throw new Error('Faild to create a vote');
-    }
   }
 
   @Mutation()
