@@ -5,7 +5,7 @@ import fs from 'fs';
 export class UploadsService {
   // Find the user in db
   async converter(files: any[], type: keyof FormatEnum | AvailableFormatInfo) {
-    const convertedImages: { image: string; name: string }[] = [];
+    const convertedImages: { image: string; name: string; size: number }[] = [];
 
     const outputFolderName = './public/converter';
     const formatFileExtension = (
@@ -34,12 +34,13 @@ export class UploadsService {
                 file.filename.lastIndexOf('.'),
               )}.${type}`,
           )
-          .then(() => {
+          .then((value) => {
             convertedImages.push({
               image: fs.readFileSync(formatFileExtension(file.filename, type), {
                 encoding: 'base64',
               }),
               name: formatFileExtension(file.filename, type, false),
+              size: value.size,
             });
             fs.rmSync(outputFolderName + `/${file.filename}`);
             fs.rmSync(formatFileExtension(file.filename, type));
