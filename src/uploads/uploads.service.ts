@@ -58,18 +58,19 @@ export class UploadsService {
   }
   async resize(files: any[], width: number, height: number) {
     const sharpResizeOutPut = './public/resize';
-    const resizedImages: { image: string; name: string }[] = [];
+    const resizedImages: { image: string; name: string; size: number }[] = [];
     try {
       for (const file of files) {
         await sharp(`${sharpResizeOutPut}/${file.filename}`)
           .resize(Number(width), Number(height))
           .toFile(sharpResizeOutPut + file.originalname)
-          .then(() => {
+          .then((value) => {
             resizedImages.push({
               image: fs.readFileSync(sharpResizeOutPut + file.originalname, {
                 encoding: 'base64',
               }),
               name: file.originalname,
+              size: value.size,
             });
             fs.rmSync(sharpResizeOutPut + `/${file.filename}`);
             fs.rmSync(sharpResizeOutPut + file.originalname);
