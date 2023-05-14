@@ -62,7 +62,9 @@ export class UploadsService {
     try {
       for (const file of files) {
         await sharp(`${sharpResizeOutPut}/${file.filename}`)
-          .resize(Number(width), Number(height))
+          .resize(Number(width), Number(height), {
+            fit: 'contain',
+          })
           .toFile(sharpResizeOutPut + file.originalname)
           .then((value) => {
             resizedImages.push({
