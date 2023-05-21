@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import sharp, { AvailableFormatInfo, FormatEnum } from 'sharp';
 import fs from 'fs';
+import { IHtmlToImageOptions } from 'src/utils/types';
 @Injectable()
 export class UploadsService {
   // Find the user in db
@@ -85,6 +86,12 @@ export class UploadsService {
       }
 
       return resizedImages;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  async htmlToImageConverter(options: IHtmlToImageOptions) {
+    try {
     } catch (error) {
       console.log(error);
     }

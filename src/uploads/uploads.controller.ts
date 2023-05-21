@@ -14,6 +14,11 @@ import { UploadsService } from './uploads.service';
 @Controller('service')
 export class UploadsController {
   constructor(private readonly uploadsService: UploadsService) {}
+  @Post('htmltoimage')
+  async htmlToImage(@Req() req: Request) {
+    console.log(req.body);
+    return req.body;
+  }
 
   @Post('converter')
   @UseInterceptors(
