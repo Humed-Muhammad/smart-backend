@@ -2,8 +2,12 @@ import { Injectable } from '@nestjs/common';
 import sharp, { AvailableFormatInfo, FormatEnum } from 'sharp';
 import fs from 'fs';
 import { IHtmlToImageOptions } from 'src/utils/types';
+import { InjectBrowser } from 'nest-puppeteer';
+import { Browser } from 'puppeteer';
+
 @Injectable()
 export class UploadsService {
+  constructor(@InjectBrowser() private readonly browser: Browser) {}
   // Find the user in db
   async converter(files: any[], type: keyof FormatEnum | AvailableFormatInfo) {
     const convertedImages: { image: string; name: string; size: number }[] = [];
@@ -22,6 +26,7 @@ export class UploadsService {
       } else {
         name = `${imageName.slice(0, imageName.lastIndexOf('.'))}.${imageType}`;
       }
+
       return name;
     };
     try {
@@ -92,6 +97,14 @@ export class UploadsService {
   }
   async htmlToImageConverter(options: IHtmlToImageOptions) {
     try {
+      const page = await this.browser.newPage();
+      await page.goto(options.url);
+      const content = await page.screenshot({
+        fullPage: true,
+        type: 'png',
+      });
+
+      return { image: content, name: `screenshot.png` };
     } catch (error) {
       console.log(error);
     }

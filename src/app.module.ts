@@ -6,6 +6,7 @@ import { APP_PIPE } from '@nestjs/core';
 
 import { ConfigModule } from '@nestjs/config';
 import { UploadsModule } from './uploads/uploads.module';
+import { PuppeteerModule } from 'nest-puppeteer';
 
 @Module({
   imports: [
@@ -15,7 +16,13 @@ import { UploadsModule } from './uploads/uploads.module';
       context: ({ req }) => ({ req }),
     }),
 
+    PuppeteerModule.forRoot(
+      { pipe: true }, // optional, any Puppeteer launch options here or leave empty for good defaults */,
+      // 'Chrome', // optional, can be useful for using Chrome and Firefox in the same project
+    ),
+
     UploadsModule,
+
     ConfigModule.forRoot({}),
   ],
   providers: [
