@@ -4,6 +4,7 @@ import fs from 'fs';
 import { IHtmlToImageOptions } from 'src/utils/types';
 import { InjectBrowser } from 'nest-puppeteer';
 import { Browser } from 'puppeteer';
+import { bufferToB64 } from 'src/utils';
 
 @Injectable()
 export class UploadsService {
@@ -59,7 +60,7 @@ export class UploadsService {
       }
       return convertedImages;
     } catch (err) {
-      throw new Error('Unsupported image');
+      throw new Error(err);
     }
   }
   async resize(files: any[], width: number, height: number) {
@@ -93,20 +94,30 @@ export class UploadsService {
       return resizedImages;
     } catch (error) {
       console.log(error);
+      throw new Error(error);
     }
   }
   async htmlToImageConverter(options: IHtmlToImageOptions) {
     try {
       const page = await this.browser.newPage();
+      await page.setViewport({ width: 1920, height: 1080 });
       await page.goto(options.url);
       const content = await page.screenshot({
-        fullPage: true,
-        type: 'png',
+        type: options.imageType,
+        omitBackground: true,
       });
 
-      return { image: content, name: `screenshot.png` };
+      await page.close();
+
+      const image = bufferToB64({
+        buffer: content,
+        imageType: options.imageType,
+      });
+
+      return { image, imageType: 'png' };
     } catch (error) {
       console.log(error);
+      throw new Error(error);
     }
   }
 }
