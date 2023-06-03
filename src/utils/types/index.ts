@@ -1,5 +1,5 @@
 export interface IHtmlToImageOptions {
   url: string;
-  screenshotSize: { width: number; height: number };
+  screenshotSize: string;
   imageType: 'jpeg' | 'png' | 'webp';
 }

@@ -5,6 +5,7 @@ import { IHtmlToImageOptions } from 'src/utils/types';
 import { InjectBrowser } from 'nest-puppeteer';
 import { Browser } from 'puppeteer';
 import { bufferToB64 } from 'src/utils';
+import { v4 as uuid4 } from 'uuid';
 
 @Injectable()
 export class UploadsService {
@@ -100,7 +101,10 @@ export class UploadsService {
   async htmlToImageConverter(options: IHtmlToImageOptions) {
     try {
       const page = await this.browser.newPage();
-      await page.setViewport({ width: 1920, height: 1080 });
+      await page.setViewport({
+        width: Number(options.screenshotSize),
+        height: 1080,
+      });
       await page.goto(options.url);
       const content = await page.screenshot({
         type: options.imageType,
@@ -114,7 +118,12 @@ export class UploadsService {
         imageType: options.imageType,
       });
 
-      return { image, imageType: 'png' };
+      return {
+        image,
+        imageType: options.imageType,
+        name: `${uuid4()}.${options.imageType}`,
+        id: uuid4(),
+      };
     } catch (error) {
       console.log(error);
       throw new Error(error);
