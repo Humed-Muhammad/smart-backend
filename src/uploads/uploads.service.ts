@@ -105,7 +105,11 @@ export class UploadsService {
         width: Number(options.screenshotSize),
         height: 1080,
       });
-      await page.goto(options.url);
+      await page.goto(options.url, {
+        timeout: 15 * 1000,
+        waitUntil: ['networkidle0'],
+      });
+
       const content = await page.screenshot({
         type: options.imageType,
         omitBackground: true,

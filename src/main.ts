@@ -3,7 +3,7 @@ import { AppModule } from './app.module';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  const PORT = process.env.PORT || 5000;
+  const PORT = process.env.PORT || 5050;
   app.enableCors({
     origin: ['https://filezillow.com', 'http://localhost:8910'],
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
