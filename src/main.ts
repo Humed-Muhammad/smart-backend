@@ -5,7 +5,7 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const PORT = process.env.PORT || 5050;
   app.enableCors({
-    origin: ['https://filezillow.com', 'http://localhost:8910'],
+    origin: ['https://filezillow.com', 'https://staging.filezillow.com'],
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     preflightContinue: false,
     optionsSuccessStatus: 204,
