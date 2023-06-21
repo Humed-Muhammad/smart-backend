@@ -16,10 +16,11 @@ import { PuppeteerModule } from 'nest-puppeteer';
       context: ({ req }) => ({ req }),
     }),
 
-    PuppeteerModule.forRoot(
-      { pipe: true }, // optional, any Puppeteer launch options here or leave empty for good defaults */,
+    PuppeteerModule
+      .forRoot
+      // { pipe: true }, // optional, any Puppeteer launch options here or leave empty for good defaults */,
       // 'Chrome', // optional, can be useful for using Chrome and Firefox in the same project
-    ),
+      (),
 
     UploadsModule,
 
