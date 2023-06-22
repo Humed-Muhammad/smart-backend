@@ -7,6 +7,7 @@ import { APP_PIPE } from '@nestjs/core';
 import { ConfigModule } from '@nestjs/config';
 import { UploadsModule } from './uploads/uploads.module';
 import { PuppeteerModule } from 'nest-puppeteer';
+import { TestModule } from './test/test.module';
 
 @Module({
   imports: [
@@ -23,7 +24,7 @@ import { PuppeteerModule } from 'nest-puppeteer';
       (),
 
     UploadsModule,
-
+    TestModule,
     ConfigModule.forRoot({}),
   ],
   providers: [
