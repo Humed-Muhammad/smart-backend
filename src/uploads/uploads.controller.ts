@@ -14,12 +14,12 @@ import { UploadsService } from './uploads.service';
 @Controller('service')
 export class UploadsController {
   constructor(private readonly uploadsService: UploadsService) {}
-  @Post('htmlToImage')
-  async htmlToImage(@Req() req: Request) {
-    const result = await this.uploadsService.htmlToImageConverter(req.body);
+  // @Post('htmlToImage')
+  // async htmlToImage(@Req() req: Request) {
+  //   const result = await this.uploadsService.htmlToImageConverter(req.body);
 
-    return result;
-  }
+  //   return result;
+  // }
 
   @Post('converter')
   @UseInterceptors(

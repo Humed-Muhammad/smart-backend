@@ -1,15 +1,15 @@
 import { Injectable } from '@nestjs/common';
 import sharp, { AvailableFormatInfo, FormatEnum } from 'sharp';
 import fs from 'fs';
-import { IHtmlToImageOptions } from 'src/utils/types';
-import { InjectBrowser } from 'nest-puppeteer';
-import { Browser } from 'puppeteer';
-import { bufferToB64 } from 'src/utils';
-import { v4 as uuid4 } from 'uuid';
+// import { IHtmlToImageOptions } from 'src/utils/types';
+// import { InjectBrowser } from 'nest-puppeteer';
+// import { Browser } from 'puppeteer';
+// import { bufferToB64 } from 'src/utils';
+// import { v4 as uuid4 } from 'uuid';
 
 @Injectable()
 export class UploadsService {
-  constructor(@InjectBrowser() private readonly browser: Browser) {}
+  // constructor(@InjectBrowser() private readonly browser: Browser) {}
   // Find the user in db
   async converter(files: any[], type: keyof FormatEnum | AvailableFormatInfo) {
     const convertedImages: { image: string; name: string; size: number }[] = [];
@@ -59,8 +59,10 @@ export class UploadsService {
             throw new Error('There is an error during conversion!.');
           });
       }
+      console.log('first');
       return convertedImages;
     } catch (err) {
+      console.log('first');
       throw new Error(err);
     }
   }
@@ -98,39 +100,39 @@ export class UploadsService {
       throw new Error(error);
     }
   }
-  async htmlToImageConverter(options: IHtmlToImageOptions) {
-    try {
-      const page = await this.browser.newPage();
-      await page.setViewport({
-        width: Number(options.screenshotSize),
-        height: 1080,
-      });
-      await page.goto(options.url, {
-        timeout: 15 * 1000,
-        waitUntil: ['networkidle0'],
-      });
+  // async htmlToImageConverter(options: IHtmlToImageOptions) {
+  //   try {
+  //     const page = await this.browser.newPage();
+  //     await page.setViewport({
+  //       width: Number(options.screenshotSize),
+  //       height: 1080,
+  //     });
+  //     await page.goto(options.url, {
+  //       timeout: 0,
+  //       waitUntil: ['networkidle0'],
+  //     });
 
-      const content = await page.screenshot({
-        type: options.imageType,
-        omitBackground: true,
-      });
+  //     const content = await page.screenshot({
+  //       type: options.imageType,
+  //       omitBackground: true,
+  //     });
 
-      await page.close();
+  //     await page.close();
 
-      const image = bufferToB64({
-        buffer: content,
-        imageType: options.imageType,
-      });
+  //     const image = bufferToB64({
+  //       buffer: content,
+  //       imageType: options.imageType,
+  //     });
 
-      return {
-        image,
-        imageType: options.imageType,
-        name: `${uuid4()}.${options.imageType}`,
-        id: uuid4(),
-      };
-    } catch (error) {
-      console.log(error);
-      throw new Error(error);
-    }
-  }
+  //     return {
+  //       image,
+  //       imageType: options.imageType,
+  //       name: `${uuid4()}.${options.imageType}`,
+  //       id: uuid4(),
+  //     };
+  //   } catch (error) {
+  //     console.log(error);
+  //     throw new Error(error);
+  //   }
+  // }
 }
