@@ -1,6 +1,5 @@
-import { ApolloDriver } from '@nestjs/apollo';
 import { Module, ValidationPipe } from '@nestjs/common';
-import { GraphQLModule } from '@nestjs/graphql';
+// import { GraphQLModule } from '@nestjs/graphql';
 
 import { APP_PIPE } from '@nestjs/core';
 
@@ -11,11 +10,11 @@ import { TestModule } from './test/test.module';
 
 @Module({
   imports: [
-    GraphQLModule.forRoot({
-      typePaths: ['./**/*.graphql'],
-      driver: ApolloDriver,
-      context: ({ req }) => ({ req }),
-    }),
+    // GraphQLModule.forRoot({
+    //   typePaths: ['./**/*.graphql'],
+    //   driver: ApolloDriver,
+    //   context: ({ req }) => ({ req }),
+    // }),
 
     // PuppeteerModule
     //   .forRoot
